@@ -1,0 +1,39 @@
+<script type="text/javascript">
+
+// Adding 500 Data Points
+var map, pointarray, heatmap;
+
+  var taxiData = [];
+
+  <% @array1.each do |tweet| %>
+    <% if tweet.geo && tweet.geo.coordinates != "[0,0]" %>
+      taxiData.push(new google.maps.LatLng(<%=tweet.geo.coordinates.first%>, <%=tweet.geo.coordinates.last%>));
+    <% end %>
+  <% end %>
+
+
+  function initialize() {
+//    alert(taxiData.length);
+    var mapOptions = {
+      zoom: 7,
+      center: new google.maps.LatLng(53.140181, -8.009033),
+      mapTypeId: google.maps.MapTypeId.SATELLITE
+    };
+
+    map = new google.maps.Map(document.getElementById('map_canvas'),
+        mapOptions);
+
+    var pointArray = new google.maps.MVCArray(taxiData);
+
+    heatmap = new google.maps.visualization.HeatmapLayer({
+      data: pointArray
+    });
+
+    heatmap.setMap(map);
+
+  }
+
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
